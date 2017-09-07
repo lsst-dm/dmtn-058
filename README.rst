@@ -8,7 +8,7 @@
      :target: http://dx.doi.org/10.5281/zenodo.#####
 
 #######################################################
-Integrating Verification Metrics into the LSST DM Stack
+Design Concepts for the DM Header Service
 #######################################################
 
 DMTN-058

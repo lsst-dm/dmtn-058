@@ -13,7 +13,7 @@ serial_number: '058'
 doc_id: 'DMTN-058'
 
 # Title of the document, without the series/serial designation
-doc_title: 'Integrating Verification Metrics into the LSST DM Stack'
+doc_title: 'Design Concepts for the DM Header Service'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
@@ -37,7 +37,7 @@ authors:
 copyright: '2017, AURA/LSST'
 
 # Description. A short, 1-2 sentence statemement used by document indices.
-description: 'Design sketches to support a feasibility study for using lsst.verify to instrument Tasks.'
+description: 'Design document for the DM Header Service.'
 
 # Abstract, if available
 # abstract: >

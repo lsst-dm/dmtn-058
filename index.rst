@@ -79,7 +79,7 @@ Description
 
 A high level description of the proposed functionality follows. Figure 1 show a diagram of the proposed flow and interconnection with other subsystems.
 
-  .. figure:: /_static/HeaderSevice.png
+  .. figure:: /_static/HeaderService.svg
      :name: Diagram
 
 Normal Operations
@@ -99,7 +99,7 @@ Catchup mode
 Once connection is reestablished between summit and base the EFD tables and LFO annex files are synced.
 Retrieve all previously unprocessed or non archived images from the DAQ and using their imageID retrieve the already constructed FITS header as in step 7, above.
 
-.. figure:: /_static/HeaderService-Detailed.png
+.. figure:: /_static/HeaderService-Detailed.svg
      :name: Diagram_Detailed
 
 Data

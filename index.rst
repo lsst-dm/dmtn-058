@@ -64,18 +64,26 @@ normal operations and catch-up mode.
 The implementation of a DM Header Service has several
 advantages. Here we list the main ones.
 
-- Provides a single method for header (i.e. meta-data) acquisition for Real-Time and Catch-up modes. 
-- Provides uniform and consistent acquisition of meta-data for LSST visits and exposures for the Spectrograph, ComCam, and LSSTCam.
-- Ensures the creation of header files synchronously with the image data acquisition.
-- Provides the analogous metadata for cross-talked files used for L1 prompt processing and for raw files, including calibrations, being archived into the data backbone.
-- It will run at the summit inside the Engineering and Facility Database (EFD) Cluster farm and will always have access to all of the live feeds from DDS.
+- Provides a single method for header (i.e. meta-data) acquisition for
+  Real-Time and Catch-up modes.
+- Provides uniform and consistent acquisition of meta-data for LSST
+  visits and exposures for the Spectrograph, ComCam, and LSSTCam.
+- Ensures the creation of header files synchronously with the image
+  data acquisition.
+- Provides the analogous metadata for cross-talked files used for L1
+  prompt processing and for raw files, including calibrations, being
+  archived into the data backbone.
+- It will run at the summit inside the Engineering and Facility
+  Database (EFD) Cluster farm and will always have access to all of
+  the live feeds from DDS.
 - Supports the LSST Data Facility (LDF) services and the Data
-  Managment Control System (DMCS) and is available for any other image
+  Management Control System (DMCS) and is available for any other image
   acquisition software.
 - Headers will contain at a `minimum` the meta-data necessary for L1 Prompt
   Processing and archiving.
 - Provides a Service Abstraction Layer (SAL) Commandable Service (CSC)
-  Communication Interfase for OCS.
+  Communication Interface for OCS. `This feature as not been
+  implemented yet`
 - Separate instances of the Header Service will exist for the Spectrograph, ComCam, and LSSTCam.
 
 Description 
@@ -89,7 +97,7 @@ Header Service.
   .. figure:: /_static/HeaderService.svg
      :name: HeaderService
 
-     Header Service Diagram and its relation to othe SAL components
+     Header Service Diagram and its relation to other SAL components
 
   .. figure:: /_static/HeaderService-Detailed.svg
      :name: Diagram_Detailed
@@ -105,7 +113,7 @@ Normal Operations
 Here we describe how the Header Service should work during normal
 operations.
 
-1. The Heder Service will run at the summit and thus will
+1. The Header Service will run at the summit and thus will
    always have access to the live telemetry and other feeds from
    DDS. It will subscribe to all of channels of interest to build an
    appropriate LSST header.
@@ -119,28 +127,29 @@ operations.
    large file object (LFO).
 4. The Header Service client publishes the existence of the LFO via
    DDS. This file should be named accordingly using the ``imageId`` (or
-   ImageName) as part of the name using an Event like
+   ``ImageName``) as part of the name using an Event like
    ``HeaderCreated`` (still TBD).
 5. The EFD automatically listens to all LFO announcement Events. When
    it sees one, it retrieves the file (protocol needs to be defined,
    but a URL is already included in the LFO announcement), and stores
-   it in the EFD LFO annex.  
+   it in the EFD LFO annex.( Alternatively the Header Service could
+   write directly to the LFO annex filesystem.)
 6. The EFD publishes an LFO announcement that it has the header
    file. Both summit and base EFD's will have a copy of the new header
    at this point. (T&S will sync the EFD's after a summit/base
    outage).
 7. DMCS retrieves the header from the EFD LFO annex at the Base (using
    its imageID and a standard filesystem path to locate it).
-8. Alternatively the DMCS could retrievd the header file as soon as
+8. Alternatively the DMCS could retrieved the header file as soon as
    the Header Service publishes the existence of the LFO.
 
 Catchup Mode
 ------------
 
-This stage represent the operational mode after a commumication outage
+This stage represents the operational mode after a communication outage
 between the summit and the base.
 
-1. Once connection is reestablished between summit and base the EFD
+1. Once connection is re-established between summit and base the EFD
    tables and LFO annex files are synced.
 2. DMCS can now retrieve all previously unprocessed or non archived images from the
    DAQ and using their ``imageID`` retrieve the already constructed FITS
@@ -159,10 +168,10 @@ Data Sources
 - In the current design a large fraction of the key/value pairs for the
   image headers will originate from static data that will come from
   configuration files, such as header templates that will be specific
-  to each instrument. These can be initialized and/or defined via SAL events.
+  to each instrument. These can be initialized and/or defined via DDS/SAL events.
 - Telemetry and Event data from the Camera Control System (CCS), Scheduler and
-  the Telescope Control System (TCS) delivered via DDS/OpenSplice. The
-  Header Service will subscribe to a list of telemetry topics from
+  the Telescope Control System (TCS) delivered via DDS. The
+  Header Service will subscribe to a number of telemetry topics from
   which it will update key/value pairs with real-time values from
   streams. Examples of this type include information regarding FILTER,
   TELRA, TELDEC, ImageID, visitID.
@@ -202,7 +211,37 @@ Data Delivery and Interface
   it.
 - If above is not performant for L1 Archiving and Prompt Processing,
   an alternative can be explored where the Header Client could pass
-  fitsio FITSHDR Python Objects directly to the DMCS Forwarders.
+  fitsio FITSHDR Python Objects directly to the DMCS Forwarders. 
+
+Concerns
+--------
+
+- In the current design, the Header Service will gather the dynamic
+  meta-data types from telemetry at the beginning of the
+  integration, at the end of readout of an exposure, or both. It is
+  unlikely that more granular telemetry is needed for Prompt
+  Processing or archiving.
+
+- If the above statement is incorrect, we need to investigate in which
+  cases this will not be satisfied and gather requirements for the
+  amount of granularity required.
+
+- Some light-weighted meta-data required for archiving or prompt
+  processing will not be provided by the telemetry emanating from SCS
+  or configuration files. If this kind of addtional data is needed, we
+  plan to compute these on-the-fly and insert them to the
+  headers. Examples of such cases are infornation regarding AIRMASS,
+  NITE (as a string) and a default plate solution based on the
+  telescope pointing.
+
+
+Implementation
+--------------
+
+The current implementation of the Header Service supports the creation
+of headers for the Camera Stand is here:
+
+https://github.com/lsst-dm/HeaderService
 
 .. .. rubric:: References
 

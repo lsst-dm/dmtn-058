@@ -56,9 +56,9 @@ Motivation
 ==========
 
 This technical note attempts to describe the DM Header Service
-for LSST images. Here we outline the services, behaviour and
+for LSST images. Here we outline the services, behavior and
 infrastructure for the service. The main motivation for this
-service is to provide a consistent mechanism for 
+entity is to provide a consistent mechanism for 
 normal operations and catch-up mode.
 
 The implementation of a DM Header Service has several
@@ -216,6 +216,8 @@ Data Delivery and Interface
 Concerns
 --------
 
+This is an incomplete list of concerns regarding the current design that we list so they can be addressed in a timely manner before or during the next design review.
+
 - In the current design, the Header Service will gather the dynamic
   meta-data types from telemetry at the beginning of the
   integration, at the end of readout of an exposure, or both. It is
@@ -228,9 +230,9 @@ Concerns
 
 - Some light-weighted meta-data required for archiving or prompt
   processing will not be provided by the telemetry emanating from SCS
-  or configuration files. If this kind of addtional data is needed, we
+  or configuration files. If this kind of additional data is needed, we
   plan to compute these on-the-fly and insert them to the
-  headers. Examples of such cases are infornation regarding AIRMASS,
+  headers. Examples of such cases are information regarding AIRMASS,
   NITE (as a string) and a default plate solution based on the
   telescope pointing.
 

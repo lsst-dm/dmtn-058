@@ -263,6 +263,35 @@ Secondary concerns
   where the Header Client could pass fitsio FITSHDR Python Objects
   directly to the DMCS Forwarders.
 
+Specifications and Requirements
+===============================
+
+Specifications
+--------------
+
+Here are the set of minimum specifications that are needed for a full
+Design of the Header Service.
+
+1.	Header definition for L1 Test Stand
+2.	Header definition for Spectrograph
+3.	Header definition for ComCam
+4.	Header definition for LSSTCam
+5.	Capture time definition for key/pairs values for L1 Test Stand
+6.	Capture time definition for key/pairs values for Spectrograph
+7.	Capture time definition for key/pairs values for ComCam
+8.	Capture time definition for key/pairs values for LSSTCam
+
+
+Requirements 
+-------------
+
+Here we present a list of proposed requirements, test and validation
+of those.
+
+  .. figure:: /_static/Requirements.png
+     :name: Requirements
+
+     Requirements Validation Matrix
 
 Implementation
 ==============
